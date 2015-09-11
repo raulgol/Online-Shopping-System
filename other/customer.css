@@ -1,0 +1,488 @@
+#id_body {
+                background-image:url(bg0.jpg);
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+
+             #id_div_0_login {
+                
+                background-color: #CCC;
+                margin-top: 10px;
+                 
+                margin-left:auto;
+                margin-right:auto;
+                padding-top: 30px;
+                width:520px;
+                height:291px;
+            }
+
+            #id_div_0_frame {
+                background:url(texture0.jpg);
+                margin-top: 10px;
+                margin-bottom: 10px;
+                padding-bottom: 50px;
+                padding-top: 16px;
+                margin-left:auto;
+                margin-right:auto;
+                width:86%;
+            }
+
+            #id_div_1_head {
+                width: 83.33%;
+                margin-left:auto;
+                margin-right: auto;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                 
+            }
+ 
+            #id_div_1_table {
+                margin-left:auto;
+                margin-right:auto;
+                margin-top: 10px;
+                margin-bottom: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+
+                width:93.33%;
+
+
+            }
+            
+
+            #id_div_2_identity {
+                margin-bottom: 10px;
+                font-size: 18pt;
+                font-family:Arial,Helvetica,sans-serif;
+            }
+            .id_div_2_prompt {
+                margin-bottom: 18px;
+                font-size: 17pt;
+                font-family:Arial,Helvetica,sans-serif;
+            }
+            .cl_div_1 {
+                margin-left:auto;
+                margin-right:auto;
+                height: 45px;
+                width:280px;
+                
+            }
+            .cl_div_2_emp {
+                font-size: 14pt;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                height: 74px;
+            }
+            .cl_div_3_checkbox {
+                border-bottom:1px solid grey;
+                border-left:1px solid grey;
+                padding-top: 26px;
+                padding-bottom: 27px;
+                padding-left: 10px;
+                padding-right: 10px;
+                height:20px;
+                width: 20px;
+                float: left;
+            }
+
+            .cl_div_3_name {
+                text-align: center;
+
+                border-bottom:1px solid grey;
+                border-left:1px solid grey;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                padding-left: 0px;
+                padding-right: 0px;
+                height:73px;
+                width: 190px;
+                float: left;
+            }
+
+            .cl_div_3_gender {
+                text-align: center;
+                border-bottom:1px solid grey;
+                border-left:1px solid grey;
+                padding-top: 28px;
+                padding-bottom: 0px;
+                padding-left: 0px;
+                padding-right: 0px;
+                height:45px;
+                width: 70px;
+                float: left;
+
+            }
+            .cl_div_3_emp_phone_birthdate {
+                text-align: center;
+
+                padding-top: 10px;
+                border-bottom:1px solid grey;
+                border-left:1px solid grey;
+            
+                
+                height: 26px;
+                width: 130px;
+                float: left;
+            }
+            .cl_div_3_emp_addr_email {
+                padding-left: 6px;
+
+                padding-top: 10px;
+                border-bottom:1px solid grey;
+                border-left:1px solid grey;
+                border-right: 1px solid grey;
+                
+                height: 26px;
+                width: 400px;
+                float: left;
+            }
+            .cl_div_4_name_herf {
+                padding-top: 10px;
+                height: 26px;       
+            }
+
+            .cl_div_4_emp_gender {
+            }
+            .cl_div_4_emp_birthdate {
+            }
+            .cl_div_4_emp_email {
+            }
+            .cl_div_4_emp_phonenumber {   
+            }
+            .cl_div_4_emp_address {   
+            }
+
+            #id_div_2_button {
+                height: 30px;
+                margin-top: 25px;
+                width: 330px;
+                margin-left:auto;
+                margin-right:auto;
+            }
+            .cl_div_3_button {        
+                float: left;
+            }
+            .cl_div_3_space {
+ 
+                height: 30px;
+                float: left;
+                width: 40px;
+            }
+            .cl_button_3 {
+                font-size: 11pt;
+                width: 80px;
+                height: 30px;
+                border-radius:100px;
+            }  
+
+            .cl_div1_2_container {
+                background-color: #CCC;
+                width:520px;
+                 
+                margin-left:auto;
+                margin-right:auto;
+                margin-top: 10px;
+                padding-top: 50px;
+                padding-bottom: 70px;
+            }
+            .cl_div1_3_left {
+                font-family:Arial,Helvetica,sans-serif;
+                font-size: 14pt;
+                text-align: right;
+                height: 40px;
+                width:230px;
+                float:left;
+                color:RGB(72,72,72);
+
+            }
+            .cl_div1_3_right {
+                font-family:Arial,Helvetica,sans-serif;
+                padding-left: 10px;
+                font-size: 14pt;
+                height: 40px;
+                width:320px;
+                float:left;
+
+            }
+            .cl_div_butt_adm_emp_info {
+                width: 180px;
+                clear:both;
+                margin-left:auto;
+                margin-right: auto;
+                 
+               
+                 
+                height:40px;
+            }
+            #id_div3_container {
+                width:400px;
+                
+                margin-left:auto;
+                margin-right:auto;
+                margin-top: 35px;
+
+
+            }
+            .cl_div_login_left {
+                font-size: 18pt;
+
+
+                float:left;
+                
+                width: 110px;
+            }
+            .cl_div_login_right {
+                float:left;
+                
+                width: 160px;
+            }
+            .cl_txt_login {
+                width: 160px;
+                height: 28px;
+            }
+            .cl_div_login_button {
+                margin-left: auto;
+                margin-right: auto;
+ 
+                padding-top: 10px;
+                width: 180px;
+                 
+            }
+            .cl_butt_login {
+                width: 80px;
+                height: 35px;
+            }
+            #id_div_login_err {
+                text-align: center;
+                font-size: 18pt;
+                color: red;
+            }
+
+
+
+
+
+
+
+#nav {
+ 
+padding-left: 0px;
+margin-top: 0px;
+margin-bottom: 0px;
+font-size: 15pt;
+font-family: Tahoma, Geneva, sans-serif;  
+
+
+list-style-type: none;
+ 
+/*定义整个ul菜单的行高和背景色*/
+}
+/*==================一级目录===================*/
+#nav a {
+ 
+display: block;
+
+/*Width(一定要)，否则下面的Li会变形*/
+}
+#nav li {
+    text-align: center;
+    height: 30px;
+    padding-top: 7px;
+background:#CCC; /*一级目录的背景色*/
+border-bottom:#FFF 2px solid; /*下面的一条白边*/
+padding-bottom: 2px;
+ 
+/*float：left,本不应该设置，但由于在Firefox不能正常显示
+继承Nav的width,限制宽度，li自动向下延伸*/
+}
+#nav li a:hover{
+background:#CC0000; /*一级目录onMouseOver显示的背景色*/
+}
+#nav a:link  {
+color:#666; text-decoration:none;
+}
+#nav a:visited  {
+color:#666;text-decoration:none;
+}
+#nav a:hover  {
+color:#FFF;text-decoration:none;font-weight:bold;
+}
+
+/*==============================*/
+#nav li:hover ul {
+
+left: auto;
+}
+#nav li.sfhover ul {
+left: auto;
+}
+#content {
+clear: left;
+}
+#nav ul.collapsed {
+display: none;
+}
+ 
+#navlist{
+ width: 16.11%;
+float:right;
+}
+
+ 
+
+#product_info {
+    padding-bottom: 10px;
+     
+    margin-left: 0.89%;
+    width:83%;
+    float:right;
+}
+
+#product_special {
+    background-color:#CCC;
+     
+    height: 100px;
+    margin-bottom: 10px;
+     
+    
+     
+}
+#product_content {
+    padding-top: 2px;
+    padding-bottom: 10px;
+    background-color:#CCC;
+     
+}
+.recommend {
+    padding-top: 2px;
+    padding-bottom: 10px;
+    background-color:#CCC;
+ 
+     
+}
+ 
+
+#login_nav {
+                padding-left: 6px;
+                padding-right: 6px;
+                 
+                margin-bottom: 10px;
+                background-color:#CCC;
+                font-size: 12pt;
+                 
+                font-family: ‘Arial Narrow’, sans-serif;
+}
+.login_nav_element {
+                 float:right;
+                 padding-top:7px;
+                 padding-bottom:5px;
+}
+
+#login_nav a {  text-decoration:none;
+                color:black;
+}
+#login_nav a:hover{  text-decoration:underline;
+                color:red;
+}
+.more_link {
+    text-decoration:none;
+    color:black;
+
+}
+.more_link:hover{
+    color:red;
+}
+#special_img {
+    background-color:white;
+    margin-top:10px;
+     
+
+ 
+    margin-right: 10px;
+     
+    float:left;
+    font-size: 16pt;
+    text-align: center;
+}
+#product_head {
+    height: 30px;
+    
+    padding-left: 10px;
+    padding-bottom: 4px;
+    
+    border-bottom:1px solid white;
+     
+     
+    
+    
+    font-size: 18pt;
+                
+    font-family: Tahoma, Geneva, sans-serif; 
+}
+.special_img_text {
+    color:RGB(72,72,72);
+    float:left;
+    margin-top: 10px;
+    width:26.88%; 
+    font-size: 17pt;
+    font-family: ‘Arial Narrow’, sans-serif;
+}
+.product_content_general {
+     
+     
+   
+    
+    
+    clear:both;
+}
+.product_sm_window {
+    margin-top: 10px;
+    float:left;
+    margin-left: 10px;
+    height: 378px;
+    width: 200px;
+     
+}
+.pro_con_img {
+    background-color: white;
+    height:200px;
+    margin-bottom: 5px;
+    font-size: 16pt;
+    text-align: center;
+     
+}
+.special_img_text_sm {
+    text-align: center;
+    color:RGB(72,72,72);
+    font-size: 11pt;
+    font-family: ‘Arial Narrow’, sans-serif;
+
+}
+html { overflow-x: auto; overflow-y: scroll; }
+.od_histry a {
+    color: #0000D5;
+}
+.od_histry a:hover {
+color:red;
+}
+.id_login_href_0 {
+    font-size: 14pt;
+    font-family: ‘Arial Narrow’, sans-serif;
+    
+}
+.id_login_href_0 a:hover {
+    color:red;
+}
+.cl_home_more_0 a:hover {
+    color: red;
+}
+.cl_home_more_0{
+    font-size:20pt;color:RGB(72,72,72);
+}
+ 
