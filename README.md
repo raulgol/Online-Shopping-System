@@ -1,7 +1,7 @@
 <snippet>
   <content>
-# 3D CAPTCHA
-## Online Shopping System
+
+# Online Shopping System
 Demo: [http://www.duoduoyu.org/x7/index.php](http://www.duoduoyu.org/x7/index.php)
 ## Introduction
 This is a online shopping website written with HTML, jQuery, CSS and php from scratch. <br />
