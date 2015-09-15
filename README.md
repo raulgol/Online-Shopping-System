@@ -4,7 +4,7 @@
 # Online Shopping System
 Demo: [http://www.duoduoyu.org/x7/index.php](http://www.duoduoyu.org/x7/index.php)
 <br />
-Backend Information Retriving Page: http://duoduoyu.org/tomasolu/manager_hw3.html
+Backend Information Retriving Page: http://www.duoduoyu.org/tomasolu/manager_hw3.html
 ## Introduction
 This is a online shopping website written with HTML, jQuery, CSS and php from scratch. <br />
 This website is completed with the framework--CodeIgniter(http://www.codeigniter.com/), which is based on development pattern of Model-View-Controller. <br />
