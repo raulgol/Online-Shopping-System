@@ -10,28 +10,16 @@
     		$this->load->model('cart_model'); 
     		$this->load->model('order_model');
     		$this->load->model('account_model');
-    		//$this->load->model('news_model');
-    		//$data['title'] = 'c';
-    		//$this->load->view('test_view',$data);
   		}
   		
 		function index() {
-			 	//$data['specials'] = $this->specials_model->get_all_special();
-			 	//$data['categories'] = $this->categories_model->get_all_categories();
-			//if($this->agent->is_mobile()) {
-			//	$this->load->view('mobile_view_head');
-			//}
-			//else {
-				$this->load->view('view_head');
-				//$this->displayNavBar();
-				$this->load->view('view_middle');
-				//$this->load->view('view_home', $data);
-				$this->load->view('view_foot');
-			//}
-			 
+			// three model files below compose a complete page framework
+			$this->load->view('view_head');
+			$this->load->view('view_middle');
+			$this->load->view('view_foot');			 
 		}
 		
-		
+		// functions below take charge for some button submit pages
 		function butt_change_1() {
 			$this->load->view('view_butt_change_1');
 		}
@@ -65,18 +53,16 @@
     			} 
 			}
 		}
+
+		// content in home page
 		function startpage() {
-
 			$this->time_out_logout();
-
-
-
-
-
 			$data['specials'] = $this->specials_model->get_all_special();
 			$data['categories'] = $this->categories_model->get_all_categories();
 			$this->load->view('view_home', $data);
 		}
+
+		// navigation bar
 		function displayNavBar() {
 			$customer_id = $this->session->userdata('customer_id');
    			if(!empty($customer_id)) {
@@ -85,16 +71,16 @@
 				$this->load->view('view_nav_bar_unlogged');
         	}   
 		}
+
+		// page for regular products
 		function regularPage() {
 			$this->time_out_logout();
 			$category_id = $this->input->post('cid');
 			$data['category_id'] = $category_id;
 			$data['category_name'] = $this->categories_model->get_certian_category($category_id);
 			$this->load->view('view_regular_page0',$data);
-
 			$cer_specials = array();
 			$cer_specials = $this->specials_model->get_certain_special($category_id);
-			//$data['cer_specials'] = 
 			if(count($cer_specials) == 0) {
 				$this->load->view('view_reg_page_no_special');
 			}
@@ -148,6 +134,8 @@
 			}
 			$this->load->view('view_regular_page2');
 		}
+
+		// page for special deals
 		function display_special() {
 			$this->time_out_logout();
 			$data['category_id_special'] = $this->input->post('cid');
@@ -158,21 +146,23 @@
 			}
 			else {
 				$data['specials'] = $this->specials_model->get_all_special();
-			}
-			 
-				$this->load->view('view_specials', $data);
- 
-
-			 
+			} 
+			$this->load->view('view_specials', $data);
 		}
+
+		// login page
 		function disp_login_page() {
 			$this->time_out_logout();
 			$this->load->view('view_login_page');
 		}
+
+		// account creating page
 		function display_create_acc() {
 			$this->time_out_logout();
 			$this->load->view('view_create_acc');
 		}
+
+		// login confirmation page
 		function login_confirm() {
 			$this->time_out_logout();
 			$username = $this->input->post('username');
@@ -188,12 +178,9 @@
     		$cus_account = array();
     		$cus_account = $this->customer_model->does_exist($username, $password);
     		if(count($cus_account) == 1) {
-		        
 		        $this->session->set_userdata('customer_first_name', $cus_account[0]['cus_fname']);
 		        $this->session->set_userdata('customer_id', $cus_account[0]['customerid']);
 		        $this->session->set_userdata('timeout_customer', time());
-		        //$_SESSION['timeout_customer'] = time();
-		         
 		        $this->cartMerge();
 		        if($this->session->userdata('login_flag')) {
 		            
@@ -205,13 +192,14 @@
 		            echo '0';
 		            exit();
 		        }
-	        //echo '0';
 	    	}
 	    	else {
 	        	echo '2';
 	        	exit();
 	    	} 
 		}
+
+		// merge the cart content before/after sign up/in
 		function cartMerge() {
 			if ($this->session->userdata('cart') !== false) {
 				$cart_arr = array();
@@ -219,34 +207,26 @@
             if(count($cart_arr)!=0) {
                 // merge
                 foreach($cart_arr as $key => $item) {
-                    //$sql_check = 'select * from cart where customerid="'.$_SESSION['customer_id'].'" and productid="'.$item['pro_id'].'";';
-                    //$res_check = mysql_query($sql_check);
                     $cart_db = array();
     				$cart_db = $this->cart_model->does_exist($this->session->userdata('customer_id'), $item['pro_id']);
                     if(count($cart_db)==0) {
-                        //$sql_merge='INSERT INTO cart(cartindex,customerid,productid,productqtty) VALUES (NULL , "'.$_SESSION['customer_id'].'", "'.$item['pro_id'].'", "'.$item['qty'].'");';
-                        //echo $sql_merge.'     ';///
-                        //exit();
                         $this->cart_model->cart_insert($this->session->userdata('customer_id'), $item['pro_id'], $item['qty']);
                     }
                     else {
-                        //$row_merge = mysql_fetch_assoc($res_check);
                         $merged_qty=$cart_db[0]['productqtty']+$item['qty'];
-                        //$sql_merge='UPDATE cart SET productqtty = "'.$merged_qty.'" WHERE customerid="'.$_SESSION['customer_id'].'" and productid="'.$item['pro_id'].'" ;';//'NSERT INTO cart(cartindex,customerid,productid,productqtty) VALUES (NULL , "'.$_SESSION['customer_id'].'", "'.$item['pro_id'].'", "'.$merged_qty.'");';
                         $this->cart_model->cart_update($this->session->userdata('customer_id'), $item['pro_id'], $merged_qty);
                     }
-                    //
-                    //$res_merge = mysql_query($sql_merge);
                 }
             }
             $this->session->unset_userdata('cart');
         	}
 		}
+
+		// add product into cart
 		function add_to_cart() {
 			$this->time_out_logout();
 						$pro_id = $this->input->post('pro_id');
 					    if($this->session->userdata('customer_first_name') === false ) {
-					        //if($pid<1 or $q<1) return;
 					        if ($this->session->userdata('cart') !== false) {
 					                $exists = false;
 					                $cart_arr = array();
@@ -265,9 +245,6 @@
 					                    $cart_arr[$max]['qty'] = 1;
 					                }
 					                $this->session->set_userdata('cart', $cart_arr);// = ;
-					                //$_SESSION['cart']['itemId']['qty']= $_SESSION['cart']['itemId']['qty'] + $q;
-					                //$max=count($_SESSION['cart']);
-					                //echo "SECOND";
 					        }
 					        else {
 					                $cart_arr=array();
@@ -279,22 +256,12 @@
 
 					    }
 					    else {
-					        //$sql_check = 'select productqtty from cart where customerid='.$_SESSION['customer_id'].' and productid='.$pro_id;
-					        //$sql_insert = 'INSERT INTO cart (cartindex,customerid,productid,productqtty)VALUES (NULL , "'.$_SESSION['customer_id'].'", "'.$pro_id.'", "1");  ';
-					        //$sql_update = 'UPDATE `test`.`cart` SET `productqtty` = '2' WHERE `cart`.`cartindex` =1 LIMIT 1 ;';
-
 					        $c_arr = array();
 					        $c_arr = $this->cart_model->does_exist($this->session->userdata('customer_id'), $pro_id);
-					         
-					        //$res_check = mysql_query($sql_check);
-					        
-					         
-					         if(count($c_arr) != 0) {
+					        if(count($c_arr) != 0) {
 					             
 					            $qty = $c_arr[0]['productqtty'];
 					            $qty++;
-					            //$sql_update = 'UPDATE cart SET productqtty = "'.$qty.'" WHERE customerid='.$_SESSION['customer_id'].' and productid='.$pro_id.';';
-					            //$res_update = mysql_query($sql_update);
 					            $q = $this->cart_model->cart_update($this->session->userdata('customer_id'), $pro_id, $qty);
 					            if($q) {// update success
 					                echo '0';
@@ -314,12 +281,15 @@
 					         }
 					    }
 		}
+
+		// log out function
 		function cus_log_out() {
 			$this->session->sess_destroy();
 		}
+
+		// products number navigation bar
 		function nav_bar_cart_num() {
 				if($this->session->userdata('customer_id') === false ) {
-  
 			        if($this->session->userdata('cart') === false) {
 			            echo '0';
 			            exit();
@@ -334,37 +304,30 @@
 			        exit();
 			    }
 		}
+
+		// display cart content
 		function cart_display() {
 			$this->time_out_logout();
 				if($this->session->userdata('customer_id') === false) {
 			        if ($this->session->userdata('cart') !== false) {
-			            //echo 'abc';
-			            //$result=$frag0.$frag1.'';
 			            $this->load->view('view_cart_display0');
-			            //$max=count($_SESSION['cart']);
 			            foreach($this->session->userdata('cart') as $item) {
-			            	//echo 'def';
 			                $cart_arr = array();
 			                $cart_arr = $this->products_model->get_a_product($item['pro_id']);
-			                //echo $item['pro_id'];
 			                $data['isSpecial'] = false;
 			                $data['specialprice'] = '';
 			                $data['startdate'] = '';
 			                $data['enddate'] = '';
 			                $data['totPrice'] = 0;
 			                if(count($cart_arr) != 0) {
-			                    //$row = mysql_fetch_assoc($res0);
 			                	$spe_arr = array();
 			                	$spe_arr = $this->specials_model->is_special($item['pro_id']);
-			                    
 			                    if(count($spe_arr) != 0) {
 			                    	$data['isSpecial'] = true;
 			                    	$data['specialprice'] = $spe_arr[0]['specialprice'];
 			                		$data['startdate'] = $spe_arr[0]['startdate'];
 			                		$data['enddate'] = $spe_arr[0]['enddate'];
 			                		$data['totPrice'] = $spe_arr[0]['specialprice']*$item['qty'];
-			                		//echo $spe_arr[0]['specialprice'].' | '.$item['qty'].' | '.$data['totPrice'];
-			                		//exit();
 			                    }
 			                    else {
 			                    	$data['isSpecial'] = false;
@@ -380,22 +343,12 @@
 			                    $data['pro_id'] = $item['pro_id'];
 			                    $data['qty'] =  $item['qty'];
 			                    $data['price'] = $cart_arr[0]['productprice'];
-
-
 			                    $this->load->view('view_cart_display', $data);
-
-			                    //$result=$result.$frag2_0.$row['productimg'].$frag2_1.$row['productname'].$frag3.$row['categoryname'].$frag4.$row['singer'].$frag5.$price_info.$frag8.$item['pro_id'].$frag8_0.'$'.$totprice.$frag9_0.$item['pro_id']
-			                      //      .$frag9_0_0.$item['pro_id'].$frag9_1.$item['qty'].$frag9_2.$item['pro_id'].$frag9_2_0.$item['pro_id'].$frag9_2_1.$item['pro_id'].$frag9_3.$item['pro_id'].$frag9_4;
 			                }
 			                else {
-			                    // need to modify
 			                }
 			            } 
 			            $this->load->view('view_cart_display_foot');
-			            //$result=$result.$frag10.$frag11; 
-			            //echo $result;
-			             //mysql_close($con);
-
 			        }
 			        else {
 			            $this->load->view('view_cart_display_empty');
@@ -406,7 +359,6 @@
 			        $c_arr = $this->cart_model->cart_certain_customer($this->session->userdata('customer_id'));
 			        if(count($c_arr) != 0) {
 			            $this->load->view('view_cart_display0');
-			            //$max=count($_SESSION['cart']);
 			            foreach($c_arr as $item ) {
 			                $cart_arr = array();
 			                $cart_arr = $this->products_model->get_a_product($item['productid']);
@@ -423,7 +375,6 @@
 			                		$data['startdate'] = $spe_arr[0]['startdate'];
 			                		$data['enddate'] = $spe_arr[0]['enddate'];
 			                		$data['totPrice'] = $spe_arr[0]['specialprice']*$item['productqtty'];
-			                        
 			                    }
 			                    else {
 			                    	$data['isSpecial'] = false;
@@ -439,12 +390,9 @@
 			                    $data['pro_id'] = $item['productid'];
 			                    $data['qty'] =  $item['productqtty'];
 			                    $data['price'] = $cart_arr[0]['productprice'];
-
-
 			                    $this->load->view('view_cart_display', $data);
 			                }
 			                else {
-			                    // need to modify
 			                }
 			            }
 			            $this->load->view('view_cart_display_foot');
@@ -452,121 +400,98 @@
 			        else {
 			            $this->load->view('view_cart_display_empty');
 			        }
-
-
 			    }
 		}
+
+		// input the quantanty of products and the total price will change accordingly
 		function cart_qty_input() {
 			$this->time_out_logout();
 			$id=$this->input->post('id');
 			$mode=$this->input->post('mode');
 			$qty=$this->input->post('qty');
-			 
-			    if($this->session->userdata('customer_id') === false) {
-			        if($mode==-1) {
-			        	$cart_arr = array();
-			        	$cart_arr = $this->session->userdata('cart');
-			            foreach($cart_arr as $key => $item) {
-			                if($item['pro_id']==$id) {
-			                	unset($cart_arr[$key]);
+		    if($this->session->userdata('customer_id') === false) {
+		        if($mode==-1) {
+		        	$cart_arr = array();
+		        	$cart_arr = $this->session->userdata('cart');
+		            foreach($cart_arr as $key => $item) {
+		                if($item['pro_id']==$id) {
+		                	unset($cart_arr[$key]);
+		                	$count_number_0123 = 0;
+		                	$cart_arr_new = array();
+		                	foreach ($cart_arr as $cart_arr_old_item) {
+		                		$cart_arr_new[$count_number_0123] = $cart_arr_old_item;
+		                		$count_number_0123++;
+		                	}
+		                	$this->session->set_userdata('cart', $cart_arr_new);
+		                }
+		            }
+		            if(count($this->session->userdata('cart'))==0) {
+		                $this->session->unset_userdata('cart');
+		            }
+		        }
+		        if($mode==1) {
+		            if (preg_match('/^[1-9][0-9]*$/', $qty)) {
+		                
+		                $cart_arr = array();
+		        		$cart_arr = $this->session->userdata('cart');
+		                foreach($cart_arr as $key1 => $item1) {
+		                    if($item1['pro_id']==$id) {
+		                        $cart_arr[$key1]['qty']=$qty;
+		                        $this->session->set_userdata('cart', $cart_arr);
+		                    }
+		                }
+		                echo '1';
+		            }
+		            else {
+		                $cart_arr = array();
+		        		$cart_arr = $this->session->userdata('cart');
+		                foreach($cart_arr as $key1 => $item1) {
+		                    if($item1['pro_id']==$id) {
+		                        $cart_arr[$key1]['qty']=1;
+		                        $this->session->set_userdata('cart', $cart_arr);
+		                    }
+		                }
+		                echo '-1';
+		            }
+		        }			       
+		    } else {
+		        if($mode==-1) {
+		            $this->cart_model->cart_delete($this->session->userdata('customer_id'), $id);
+		        }
+		        if($mode==1) {
+		            if (preg_match('/^[1-9][0-9]*$/', $qty)) {
+		                $cart_update_result = $this->cart_model->cart_update($this->session->userdata('customer_id'), $id, $qty);
+		                if($cart_update_result === false) {
+		                    echo '2';
+		                }
+		                else {
+		                    echo '1';
+		                }
+		            }
+		            else {
+		                $cart_update_result = $this->cart_model->cart_update($this->session->userdata('customer_id'), $id, 1);
+		                if($cart_update_result === false) {
+		                    echo '2';
+		                }
+		                else {
+		                    echo '-1';
+		                }
+		            }
 
-			                	$count_number_0123 = 0;
-			                	$cart_arr_new = array();
-			                	foreach ($cart_arr as $cart_arr_old_item) {
-			                		$cart_arr_new[$count_number_0123] = $cart_arr_old_item;
-			                		$count_number_0123++;
-			                	}
-			                	$this->session->set_userdata('cart', $cart_arr_new);
-			                	//$delete_item = array('pro_id' => $item['pro_id'], 'qty' => $item['qty']);
-								//$this->session->unset_userdata($delete_item);
-			                    //$this->session->unset_userdata('cart');//unset($_SESSION['cart'][$key]);
-			                }
-			            }
-			            if(count($this->session->userdata('cart'))==0) {
-			                $this->session->unset_userdata('cart');
-			            }
-			           
+		        }
 
-			        }
-			        if($mode==1) {
-			            if (preg_match('/^[1-9][0-9]*$/', $qty)) {
-			                
-			                $cart_arr = array();
-			        		$cart_arr = $this->session->userdata('cart');
-			                foreach($cart_arr as $key1 => $item1) {
-			                    if($item1['pro_id']==$id) {
-			                        //$_SESSION['cart'][$key1]['qty']=$qty;
-			                        $cart_arr[$key1]['qty']=$qty;
-			                        $this->session->set_userdata('cart', $cart_arr);
-			                    }
-			                }
-			                //print_r($_SESSION['cart']);
-			                echo '1';
-			            }
-			            else {
-			                
-			                $cart_arr = array();
-			        		$cart_arr = $this->session->userdata('cart');
-			                foreach($cart_arr as $key1 => $item1) {
-			                    if($item1['pro_id']==$id) {
-			                        $cart_arr[$key1]['qty']=1;
-			                        $this->session->set_userdata('cart', $cart_arr);
-			                    }
-			                }
-			               // print_r($_SESSION['cart']);
-			                echo '-1';
-
-			            }
-			   
-
-			        }
-			       
-			    }
-			    else {
-			        if($mode==-1) {
-			            $this->cart_model->cart_delete($this->session->userdata('customer_id'), $id);
-			        }
-			        if($mode==1) {
-			            if (preg_match('/^[1-9][0-9]*$/', $qty)) {
-			                //echo '1';
-			                //$sql_update='UPDATE cart SET productqtty = "'.$qty.'" WHERE  customerid='.$_SESSION['customer_id'].' and productid = '.$id.' LIMIT 1 ;';
-			                //$res_update = mysql_query($sql_update);
-			                $cart_update_result = $this->cart_model->cart_update($this->session->userdata('customer_id'), $id, $qty);
-			                if($cart_update_result === false) {
-			                    echo '2';
-			                }
-			                else {
-			                    echo '1';
-			                }
-			                //print_r($_SESSION['cart']);
-			            }
-			            else {
-			                //echo '-1';
-			                $cart_update_result = $this->cart_model->cart_update($this->session->userdata('customer_id'), $id, 1);
-			                if($cart_update_result === false) {
-			                    echo '2';
-			                }
-			                else {
-			                    echo '-1';
-			                }
-			               // print_r($_SESSION['cart']);
-			            }
-
-			        }
-
-			    } 
+		    } 
 		}
+
+		// calculate total price of the cart
 		function cart_total_price() {
 			    $id=$this->input->post('id');
-
 			    if($this->session->userdata('customer_id') === false) {
 			            foreach($this->session->userdata('cart') as $item) {
 			                if($item['pro_id']==$id) {
 			                    $spe_arr = array();
 			                	$spe_arr = $this->specials_model->is_special($id);
-			                    if(count($spe_arr) != 0) {
-			                     
-			                        
+			                    if(count($spe_arr) != 0) {			                     
 			                        $totprice = $spe_arr[0]['specialprice']*$item['qty'];
 			                        echo '$'.$totprice;
 			                        exit();
@@ -582,13 +507,9 @@
 			            }
 			    }
 			    else {
-			                //$sql_qty='select productqtty from cart WHERE customerid='.$_SESSION['customer_id'].' and productid = '.$id.' LIMIT 1;';
-			                //$res_qty = mysql_query($sql_qty);
 			    			$arr = array();
 			    			$arr = $this->cart_model->does_exist($this->session->userdata('customer_id'), $id);
 			                if(count($arr) != 0) {
-			                         
-
 			                    $spe_arr = array();
 			                	$spe_arr = $this->specials_model->is_special($id);
 			                    if(count($spe_arr) != 0) {
@@ -605,12 +526,10 @@
 			                        exit();
 			                    }
 			                }
-
-			              
-			            
-
 			    }
 		}
+
+		// recommandations according to products in cart
 		function recommand() {
 			$cart_arr_recommand = array();
 			if($this->session->userdata('customer_id') === false) {  // not logged in
@@ -655,16 +574,14 @@
 			                    $data['categoryname'] = $row_recommand['categoryname'];
 			                    $data['singer'] = $row_recommand['singer'];
 			                    $data['pro_id'] = $row_recommand['proid'];
-			                   // $data['qty'] =  $row_recommand['productqtty'];
 			                    $data['price'] = $row_recommand['productprice'];
 			                    $data['s'] = $row_recommand['s'];
-
 			                    $this->load->view('view_recommand_display', $data);
 		    	}
 		    }
-
-
 		}
+
+		// display order history
 		function orders_placed_display() {
 			if($this->session->userdata('customer_id') === false) {
 				$this->load->view('view_order_not_logged');
@@ -680,7 +597,6 @@
     		else {
 		    $order_smry = '';
 		    $this->load->view('view_order_head');
-		    //  view_order_foot.php  view_order_content.php
 		    foreach($order_arr as $row) {
 		        if($row['shipping_addr'] == null || $row['shipping_addr'] == '') {
 		            $fn = '';
@@ -690,7 +606,6 @@
 		            $sa_arr = split (",", $row['shipping_addr']);///^[,]$/
 		            $fn = $sa_arr[0];
 		        }
-		        //echo $fn;
 		        if($row['orderdate'] == null || $row['orderdate'] == '') {
 		            $date = '';
 		        }
@@ -700,7 +615,6 @@
 		            $y = $od_arr[0];
 		            $m = $od_arr[1];
 		            $d = $od_arr[2];
-		            //echo $y.' '.$m.' '.$d;
 		            $m = $this->month_proc($m);
 		            $date = $m.' '.$d.', '.$y;
 		        }
@@ -713,6 +627,8 @@
 		    $this->load->view('view_order_foot');
     		}
 		}
+
+		// display details of an order
 		function details_of_orders_display() {
 			$id=$this->input->post('id');
 			if($this->session->userdata('customer_id') === false) {
@@ -738,7 +654,6 @@
 		            $data['date'] = $m.' '.$d.', '.$y;
 	        	}
 
-        // shipping addr
 		        $data['sa1'] = '';$data['sa2'] = '';$data['sa3'] = '';$data['sa4'] = '';$data['sa5'] = '';
 		        $data['ba1'] = '';$data['ba2'] = '';$data['ba3'] = '';$data['ba4'] = '';$data['ba5'] = '';
 		        
@@ -778,21 +693,19 @@
 					$temp['productname'] = $res[0]['productname'];
 					$temp['categoryname'] = $res[0]['categoryname'];
 					$temp['singer'] = $res[0]['singer'];
-            		//$content = $content.$c0.$row_pro['productimg'].$c1.$row_pro['productname'].$c2.$row_pro['categoryname'].$c3.$row_pro['singer'].$c4.$row_order_detail['proprice'].$c5
-            		//.$tot_price_0.$c6.$row_order_detail['proqtty'].$c7;
         		}
         		else {
         			$temp['productimg'] ='';
 					$temp['productname'] = '';
 					$temp['categoryname'] = '';
 					$temp['singer'] = '';
-            		//$content = $content.$c0.$c1.$c2.$c3.$c4.$row_order_detail['proprice'].$c5
-            		//.$tot_price_0.$c6.$row_order_detail['proqtty'].$c7;
         		}
         		$this->load->view('view_order_detail_content', $temp);
     		}
     		$this->load->view('view_order_detail_foot');
 		}
+
+		// translate month number to string
 		function month_proc($m) {
 			if($m == 1 || $m == '01') {
                 $m = 'Jan';
@@ -832,16 +745,19 @@
             }
             return $m;
 		}
+
+		// 
 		function proceed_to_co() {
 			$this->time_out_logout();
-			    if($this->session->userdata('customer_id') === false) {
-        			$this->session->set_userdata('login_flag', 1);
-        			echo '0';
-    			}
-    			else {
-        			echo '1';
-    			}
+		    if($this->session->userdata('customer_id') === false) {
+    			$this->session->set_userdata('login_flag', 1);
+    			echo '0';
+			} else {
+    			echo '1';
+			}
 		}
+
+		// validate shipping address, the number returned stand for different errors or success
 		function check_out_shipping_addr() {
 			if($this->session->userdata('customer_id') === false) {
     			echo '';
@@ -860,6 +776,8 @@
     		}
     		$this->load->view('view_co_shipping_addr', $data);
 		}
+
+		// validate shipping address updating information
 		function add_update_shipping_addr() {
 			if($this->session->userdata('customer_id') === false) {
     			echo '';
@@ -956,6 +874,8 @@
 		        }
 	    	}
 		}
+
+		// retireve credit card information from database and display it
 		function check_out_credit_card() {
 			if($this->session->userdata('customer_id') === false) {
     			echo '';
@@ -966,16 +886,16 @@
 			$billing_addr_arr = $this->address_model->billing_addr_retrieve($this->session->userdata('customer_id'));
 			$card_info_arr = array();
 			$card_info_arr = $this->address_model->card_info_retrieve($this->session->userdata('customer_id'));
-				$data['ba_nm'] = '';    
-		        $data['ba_cn'] = '';    
-		        $data['expire_month'] = '';
-		        $data['expire_year'] = '';
-		        $data['ba_cvv'] = '';       
-		        $data['ba_addr'] = '';   
-		        $data['ba_ct'] = '';   
-		        $data['ba_st'] = '';   
-		        $data['ba_zip'] = '';   
-		        $data['ba_pn'] = ''; 
+			$data['ba_nm'] = '';    
+	        $data['ba_cn'] = '';    
+	        $data['expire_month'] = '';
+	        $data['expire_year'] = '';
+	        $data['ba_cvv'] = '';       
+	        $data['ba_addr'] = '';   
+	        $data['ba_ct'] = '';   
+	        $data['ba_st'] = '';   
+	        $data['ba_zip'] = '';   
+	        $data['ba_pn'] = ''; 
 		    if((count($card_info_arr) != 0)&&(count($billing_addr_arr) != 0)) {
 		        $row0 = $card_info_arr[0];
 		        $row1 = $billing_addr_arr[0];
@@ -994,6 +914,8 @@
     		}
     		$this->load->view('view_co_card_info', $data);
 		}
+
+		// validate and save credit card billing address
 		function add_update_card_billing_addr() {
 			if($this->session->userdata('customer_id') === false) {
     			echo '';
@@ -1085,15 +1007,13 @@
 			$card_info_arr = $this->address_model->card_info_retrieve($this->session->userdata('customer_id'));
 			if((count($card_info_arr) != 0)&&(count($billing_addr_arr) != 0)) {
         		$mode = 1;
-    		}
-    		else {
+    		} else {
         		$mode = 0;
     		}
     		if($mode==0) {
         		$res_0 = $this->address_model->card_info_insert($this->session->userdata('customer_id'), $ba_nm, $ba_cn, $ba_month, $ba_year, $ba_cvv);
         		$res_1 = $this->address_model->billing_addr_insert($this->session->userdata('customer_id'), $ba_addr, $ba_ct, $ba_st, $ba_zip, $ba_pn);
-    		}
-    		else {
+    		} else {
         		$res_0 = $this->address_model->card_info_update($this->session->userdata('customer_id'), $ba_nm, $ba_cn, $ba_month, $ba_year, $ba_cvv);
 				$res_1 = $this->address_model->billing_addr_update($this->session->userdata('customer_id'), $ba_addr, $ba_ct, $ba_st, $ba_zip, $ba_pn);
     		}
@@ -1101,8 +1021,7 @@
         		if($mode==0) {
             		echo '0';//'The credit card and billing address has been successfully added.'; //succeed
             		exit();
-        		}
-        		else {
+        		} else {
             		echo '1';//'The credit card and billing address have been successfully updated.';// unknown error
             		exit();
         		}
@@ -1112,22 +1031,15 @@
         		if($mode==0) {
             		echo '2';//'Error: the credit card and billing address can not be added.'; //succeed
             		exit();
-        		}
-        		else {
+        		} else {
             		echo '3';//'Error: the credit card and billing address can not be updated.';// unknown error
             		exit();
         		}
     		}
 		}
+
+		// place order
 		function place_order() {
-
-			//function place_order_display() {
-			//	$this->load->view('view_place_order_display');
-			//}
-
-
-
-
 			if($this->session->userdata('customer_id') === false) {
     			echo '';
     			exit();
@@ -1146,8 +1058,7 @@
     		$order_history = $this->order_model->all_orders();
     		if(count($order_history)==0) {
         		$orderindex=1;
-    		}
-    		else {
+    		} else {
         		$orderindex = $this->order_model->max_order_index();
         		$orderindex++;
     		}
@@ -1157,21 +1068,14 @@
     		$is_special_array = array();
     		foreach($cart_po as $cart_item ) {
 		        $singleprice = 0;
-		        ////////////////////////////////
-		        //$sql_check_special = 'select * from special s where s.productid='.$row_cart['productid'];
-		        //$res_check_special = mysql_query($sql_check_special);
 		        $ch_specials = array();
 				$ch_specials = $this->specials_model->is_special($cart_item['productid']);
-				//$data['cer_specials'] = 
 				if(count($ch_specials) != 0) { 
 					$singleprice = $ch_specials[0]['specialprice'];
-		            //$price_array["'".$row_cart['productid']."'"] = $singleprice;
 		            $price_array[$cart_item['productid']] = $singleprice;
 		            $is_special_array[$cart_item['productid']] = 1;
 		        }
 		        else {
-		            //$sql_regular_price = 'select productprice from products where productid='.$row_cart['productid'];
-		            //$res_regular_price = mysql_query($sql_regular_price);
 		            $reg_price = array();
 					$reg_price = $this->products_model->get_a_certain_product_price($cart_item['productid']);
 		            if(count($reg_price) != 0) {
@@ -1179,113 +1083,76 @@
 		                //$price_array["'".$row_cart['productid']."'"] = $singleprice;
 		                $price_array[$cart_item['productid']] = $singleprice;
 		                $is_special_array[$cart_item['productid']] = 0;
-		            }
-		            else {
+		            } else {
 		                $singleprice = 0;  // if this product is in cart but not in product table. need to modify 
-		                //$price_array["'".$row_cart['productid']."'"] = 0;
 		                $price_array[$cart_item['productid']] = 0;
 		                $is_special_array[$cart_item['productid']] = 0;
 		            }
 		        }
 		        $totalprice = $totalprice + $singleprice * $cart_item['productqtty'];
-		        //echo 'pro id: '.$row_cart['productid'].' | '.$price_array["'".$row_cart['productid']."'"].'  ';
-		        //echo 'pro id: '.$row_cart['productid'].' | '.$price_array[$row_cart['productid']].'  ';
     		}
+		    $addr_arr0 = array();
+			$addr_arr0 = $this->address_model->shipping_addr_retrieve($this->session->userdata('customer_id'));
+		    if(count($addr_arr0) != 0) {
+		        $shipping_addr = $addr_arr0[0]['fullname'].','.$addr_arr0[0]['addressline'].','.$addr_arr0[0]['city'].','.$addr_arr0[0]['state']
+		                        .','.$addr_arr0[0]['zip'].','.$addr_arr0[0]['phonenumber'];
+		    } else {
+		        $shipping_addr = '';
+		    }
+		    $card_arr0 = array();
+			$card_arr0 = $this->address_model->card_info_retrieve($this->session->userdata('customer_id'));
+		    if(count($card_arr0) != 0) {
+		        $billing_addr = $card_arr0[0]['nameoncard'].',';
+		    } else {
+		        $billing_addr = ',';
+		    }
+		    $b_addr_arr0 = array();
+			$b_addr_arr0 = $this->address_model->billing_addr_retrieve($this->session->userdata('customer_id'));
+		    if(count($b_addr_arr0) != 0) {
+		        $billing_addr = $billing_addr.$b_addr_arr0[0]['b_addressline'].','.$b_addr_arr0[0]['b_city'].','.$b_addr_arr0[0]['b_state'].','.$b_addr_arr0[0]['b_zip']
+		                        .','.$b_addr_arr0[0]['b_phonenumber'];
+		    } else {
+		        $billing_addr = '';
+		    }
+		    $res_add_order = $this->order_model->place_order($orderindex, $this->session->userdata('customer_id'), $date, $totalprice, $billing_addr, $shipping_addr);
+		    if($res_add_order) {
+		        $res_cart = array();
+		        $res_cart = $this->cart_model->cart_certain_customer($this->session->userdata('customer_id'));
+		        $add_order_detail_correct = true;
+		        foreach($res_cart as $row_cart ) {
+		            $res_add_order_detail = $this->order_model->insert_order_detail($orderindex, $row_cart['productid'], $row_cart['productqtty'], $price_array[$row_cart['productid']], $is_special_array[$row_cart['productid']]);
+		            if(!$res_add_order_detail) {
+		                $add_order_detail_correct = false;
+		            }
+		        }
+		        $res_cart_delete = $this->cart_model->cart_delete_all($this->session->userdata('customer_id'));
+		        if(!$add_order_detail_correct) {
+		            $parameter_po['select'] = 3;
+		        		$this->load->view('view_place_order_display', $parameter_po);
+		        		$this->output->_display();
+		            exit();
+		        }
+		        if(!$res_cart_delete) {
+		            $parameter_po['select'] = 4;
+		        		$this->load->view('view_place_order_display', $parameter_po);
+		        		$this->output->_display();
+		            exit();
+		        }
+		       $parameter_po['select'] = 5;
+		        		$this->load->view('view_place_order_display', $parameter_po);
+		        		$this->output->_display();
+		        exit();
 
-
-
-
-
-
-
-	//$sql_shipping_addr = 'select * from address where customerid='.$_SESSION['customer_id'];
-    //$res_shipping_addr = mysql_query($sql_shipping_addr);
-    $addr_arr0 = array();
-	$addr_arr0 = $this->address_model->shipping_addr_retrieve($this->session->userdata('customer_id'));
-    if(count($addr_arr0) != 0) {
-        $shipping_addr = $addr_arr0[0]['fullname'].','.$addr_arr0[0]['addressline'].','.$addr_arr0[0]['city'].','.$addr_arr0[0]['state']
-                        .','.$addr_arr0[0]['zip'].','.$addr_arr0[0]['phonenumber'];
-    }
-    else {
-        $shipping_addr = '';
-    }
-
-
-    //$sql_card_info = 'select * from cardinfo where customerid='.$_SESSION['customer_id'];
-    //$res_card_info = mysql_query($sql_card_info);
-    //if($row_card_info = mysql_fetch_assoc($res_card_info)) {
-    $card_arr0 = array();
-	$card_arr0 = $this->address_model->card_info_retrieve($this->session->userdata('customer_id'));
-    if(count($card_arr0) != 0) {
-        $billing_addr = $card_arr0[0]['nameoncard'].',';
-    }
-    else {
-        $billing_addr = ',';
-    }
-
-
-    //$sql_billing_addr = 'select * from billing_address where b_customerid='.$_SESSION['customer_id'];
-    //$res_billing_addr = mysql_query($sql_billing_addr);
-    //if($row_billing_addr = mysql_fetch_assoc($res_billing_addr)) {
-    $b_addr_arr0 = array();
-	$b_addr_arr0 = $this->address_model->billing_addr_retrieve($this->session->userdata('customer_id'));
-    if(count($b_addr_arr0) != 0) {
-        $billing_addr = $billing_addr.$b_addr_arr0[0]['b_addressline'].','.$b_addr_arr0[0]['b_city'].','.$b_addr_arr0[0]['b_state'].','.$b_addr_arr0[0]['b_zip']
-                        .','.$b_addr_arr0[0]['b_phonenumber'];
-    }
-    else {
-        $billing_addr = '';
-    }
-
-    //echo $billing_addr;
-    //$sql_add_order = 'INSERT INTO placedorder (orderindex,customerid,orderdate,totalcost,billing_addr,shipping_addr)
-    //                  VALUES ("'.$orderindex.'", "'.$_SESSION['customer_id'].'", "'.$date.'", "'.$totalprice.'", "'.$billing_addr.'", "'.$shipping_addr.'");';
-    //$res_add_order = mysql_query($sql_add_order); 
-    $res_add_order = $this->order_model->place_order($orderindex, $this->session->userdata('customer_id'), $date, $totalprice, $billing_addr, $shipping_addr);
-    if($res_add_order) {
-        //$sql_cart = 'select * from cart where customerid='.$_SESSION['customer_id'];
-        //$res_cart = mysql_query($sql_cart);
-        $res_cart = array();
-        $res_cart = $this->cart_model->cart_certain_customer($this->session->userdata('customer_id'));
-        $add_order_detail_correct = true;
-        foreach($res_cart as $row_cart ) {
-        	//echo ' '.$orderindex.' '.$row_cart['productid'].' '.$row_cart['productqtty'].' '.$price_array[$row_cart['productid']].' '.$is_special_array[$row_cart['productid']];
-            //$sql_add_order_detail = 'INSERT INTO orderdetail (od_index,orderindex,proid,proqtty,proprice, is_special)VALUES 
-             //                        (NULL ,"'.$orderindex.'","'.$row_cart['productid'].'","'.$row_cart['productqtty'].'","'.$price_array[$row_cart['productid']].'","'.$is_special_array[$row_cart['productid']].'");';
-            $res_add_order_detail = $this->order_model->insert_order_detail($orderindex, $row_cart['productid'], $row_cart['productqtty'], $price_array[$row_cart['productid']], $is_special_array[$row_cart['productid']]);
-            if(!$res_add_order_detail) {
-                $add_order_detail_correct = false;
-            }
-        }
-        
-        //$sql_cart_delete = 'DELETE FROM cart WHERE customerid ='.$_SESSION['customer_id'];
-        $res_cart_delete = $this->cart_model->cart_delete_all($this->session->userdata('customer_id'));
-        if(!$add_order_detail_correct) {
-            $parameter_po['select'] = 3;
-        		$this->load->view('view_place_order_display', $parameter_po);
-        		$this->output->_display();
-            exit();
-        }
-        if(!$res_cart_delete) {
-            $parameter_po['select'] = 4;
-        		$this->load->view('view_place_order_display', $parameter_po);
-        		$this->output->_display();
-            exit();
-        }
-       $parameter_po['select'] = 5;
-        		$this->load->view('view_place_order_display', $parameter_po);
-        		$this->output->_display();
-        exit();
-
-    }
-    else {
-        $parameter_po['select'] = 2;
-        		$this->load->view('view_place_order_display', $parameter_po);
-        		$this->output->_display();
-        exit();
-    }
+		    }
+		    else {
+		        $parameter_po['select'] = 2;
+		        		$this->load->view('view_place_order_display', $parameter_po);
+		        		$this->output->_display();
+		        exit();
+		    }
 	}
 
+	// validate and save new account information
 	function create_acc_confirm() {
 		$un = $this->input->post('un'); $pw0 = $this->input->post('pw0'); $pw1 = $this->input->post('pw1');
     	$fn = $this->input->post('fn'); $ln = $this->input->post('ln'); $em = $this->input->post('em');
@@ -1297,7 +1164,6 @@
 	        echo '4';
 	        exit();
 	    }
-
 	    if(($pw0==null || $pw0=='')&&($pw1==null||$pw1=='')) {
 	        echo '0';
 	        exit();
@@ -1345,45 +1211,40 @@
 	    $res_check_un = array();
 	    $res_check_un = $this->account_model->check_username($un);
 	    if(count($res_check_un) == 0) {
-        $res = $this->account_model->create_new_account($un, $pw0, $fn, $ln, $em);
-        if($res) {
-            //$sql_retr_cid='select * from customers where cus_username="'.$un.'"';
-            //$res_retr_cid = mysql_query($sql_retr_cid);
-            $res_retr_cid = array();
-            $res_retr_cid = $this->account_model->retrieve_userid($un);
-            if(count($res_retr_cid) != 0) {
-                $cid=$res_retr_cid[0]['customerid'];
-                $this->session->set_userdata('customer_id', $cid);
-                $this->session->set_userdata('customer_first_name', $fn);
-            }
-            else {
-                echo '11'; //
-                exit();
-            }
-
-            
-            $this->cartMerge();
-            if($this->session->userdata('login_flag') !== false) {
-                $this->session->unset_userdata('login_flag');
-                echo '13'; // send to cart
-                exit();
-            }
-            else {
-                echo '14'; // sent to home page(logged in)
-                exit();
-            }
-        }
-        else {
-            echo '12';// unknown error
-            exit();
-        }
-        
-    }
-    else {
-        echo '5';
-        exit();
-    }
+	        $res = $this->account_model->create_new_account($un, $pw0, $fn, $ln, $em);
+	        if($res) {
+	            $res_retr_cid = array();
+	            $res_retr_cid = $this->account_model->retrieve_userid($un);
+	            if(count($res_retr_cid) != 0) {
+	                $cid=$res_retr_cid[0]['customerid'];
+	                $this->session->set_userdata('customer_id', $cid);
+	                $this->session->set_userdata('customer_first_name', $fn);
+	            }
+	            else {
+	                echo '11'; //
+	                exit();
+	            }
+	            $this->cartMerge();
+	            if($this->session->userdata('login_flag') !== false) {
+	                $this->session->unset_userdata('login_flag');
+	                echo '13'; // send to cart
+	                exit();
+	            }
+	            else {
+	                echo '14'; // sent to home page(logged in)
+	                exit();
+	            }
+	        } else {
+	            echo '12';// unknown error
+	            exit();
+	        }
+    	} else {
+        	echo '5';
+        	exit();
+    	}
 	}	
+
+	// display the page of editing profiles
 	function edit_profile_display() {
 		$this->time_out_logout();
 		if($this->session->userdata('customer_id') === false) {
@@ -1397,14 +1258,16 @@
     	$data['fn'] = '';
     	$data['ln'] = '';
     	$data['em'] = '';
-    if(count($res_check_un) != 0) {
-        $data['un'] = $res_check_un[0]['cus_username'];
-        $data['fn'] = $res_check_un[0]['cus_fname'];
-        $data['ln'] = $res_check_un[0]['cus_lname'];
-        $data['em'] = $res_check_un[0]['cus_email'];
-    }
-    $this->load->view('view_edit_profile_display', $data);
+    	if(count($res_check_un) != 0) {
+        	$data['un'] = $res_check_un[0]['cus_username'];
+        	$data['fn'] = $res_check_un[0]['cus_fname'];
+        	$data['ln'] = $res_check_un[0]['cus_lname'];
+        	$data['em'] = $res_check_un[0]['cus_email'];
+    	}
+    	$this->load->view('view_edit_profile_display', $data);
 	}
+
+	// validate and save the edited profiles
 	function edit_profile_confirm() {
 		if($this->session->userdata('customer_id') === false) {
 				$this->load->view('view_create_account_error');
@@ -1424,9 +1287,6 @@
 	        echo '4';
 	        exit();
 	    }
-
-	  
-
 	    if($fn==null || $fn=='') {
 	        echo '6'; //6: Please enter your first name.
 	        exit();
@@ -1463,16 +1323,17 @@
         	}
 	    }
 
-$res = $this->account_model->update_account($un, $fn, $ln, $em, $this->session->userdata('customer_id'));
-if($res) {
-   
-   $this->session->set_userdata('customer_first_name', $fn);
-   echo '100'; //ok
-}
-else {
-    echo '12';  // failed
-}
+		$res = $this->account_model->update_account($un, $fn, $ln, $em, $this->session->userdata('customer_id'));
+		if($res) {
+   			$this->session->set_userdata('customer_first_name', $fn);
+   			echo '100'; //ok
+		}
+		else {
+    		echo '12';  // failed
+		}
 	}
+
+	// validate and save new password
 	function change_password() {
 		if($this->session->userdata('customer_id') === false) {
     			echo '';
@@ -1504,12 +1365,13 @@ else {
     	else {
         	echo '4';
     	}
-
 	}
+
+	// retrieve and display saved address
 	function addr_payment_display() {
 		if($this->session->userdata('customer_id') === false) {
-    			echo '';
-    			exit();
+    		echo '';
+    		exit();
 		}
 		$this->time_out_logout();
 		$res_shipping_addr = array();
@@ -1535,146 +1397,21 @@ else {
 	        $data['sa_pn'] = ' value="'.$row['phonenumber'].'" '; 
     	}
     	if((count($res_card_info) != 0)&&(count($res_billing_addr) != 0)) {
-        $row0 = $res_card_info[0];
-        $row1 = $res_billing_addr[0];
-        $data['ba_button'] = 1;//'<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard()" style="width:180px;height:30px;font-size:13pt">';   
-        $data['ba_nm'] = ' value="'.$row0['nameoncard'].'" ';    
-        $data['ba_cn'] = ' value="'.$row0['cardnumber'].'" ';    
-        $data['month_year_exist'] = true;
-        $data['expire_month'] = $row0['expire_month'];    $data['expire_year'] = $row0['expire_year'];
-        //$ba_year = ' selected="'.$row0['expire_year'].'" ';   
-        //$ba_month = ' selected="'.$row0['expire_month'].'" '; 
-        /*$ba_month='';
-        for($i=1;$i<=12;$i++) {
-            if($i==$row0['expire_month']) {
-                $ba_month=$ba_month.'<option selected="selected" value="'.$i.'">'.$i.'</option>';
-            }
-            else {
-                $ba_month=$ba_month.'<option value="'.$i.'">'.$i.'</option>';
-            }
-        }  
-        $ba_year='';
-        for($i=2014;$i<=2032;$i++) {
-            if($i==$row0['expire_year']) {
-                $ba_year=$ba_year.'<option selected="selected" value="'.$i.'">'.$i.'</option>';
-            }
-            else {
-                $ba_year=$ba_year.'<option value="'.$i.'">'.$i.'</option>';
-            }
-        }*/
-        $data['ba_cvv'] = ' value="'.$row0['cvv'].'" ';       
-        $data['ba_addr'] = ' value="'.$row1['b_addressline'].'" ';   
-        $data['ba_ct'] = ' value="'.$row1['b_city'].'" ';   
-        $data['ba_st'] = ' value="'.$row1['b_state'].'" ';   
-        $data['ba_zip'] = ' value="'.$row1['b_zip'].'" ';   
-        $data['ba_pn'] = ' value="'.$row1['b_phonenumber'].'" '; 
-
-        
-    }
-    $this->load->view('view_addr_pament_method_display', $data);
+	        $row0 = $res_card_info[0];
+	        $row1 = $res_billing_addr[0];
+	        $data['ba_button'] = 1;//'<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard()" style="width:180px;height:30px;font-size:13pt">';   
+	        $data['ba_nm'] = ' value="'.$row0['nameoncard'].'" ';    
+	        $data['ba_cn'] = ' value="'.$row0['cardnumber'].'" ';    
+	        $data['month_year_exist'] = true;
+	        $data['expire_month'] = $row0['expire_month'];    $data['expire_year'] = $row0['expire_year'];
+	        $data['ba_cvv'] = ' value="'.$row0['cvv'].'" ';       
+	        $data['ba_addr'] = ' value="'.$row1['b_addressline'].'" ';   
+	        $data['ba_ct'] = ' value="'.$row1['b_city'].'" ';   
+	        $data['ba_st'] = ' value="'.$row1['b_state'].'" ';   
+	        $data['ba_zip'] = ' value="'.$row1['b_zip'].'" ';   
+	        $data['ba_pn'] = ' value="'.$row1['b_phonenumber'].'" ';  
+    	}
+    	$this->load->view('view_addr_pament_method_display', $data);
 	}
-	/*function add_update_shipping_addr() {
-		if($this->session->userdata('customer_id') === false) {
-    			echo '';
-    			exit();
-		}
-		$sa_fn = $this->input->post('sa_fn');
-	    $sa_addr = $this->input->post('sa_addr');
-	    $sa_city = $this->input->post('sa_city');
-	    $sa_state = $this->input->post('sa_state');
-	    $sa_zip = $this->input->post('sa_zip');
-	    $sa_pn = $this->input->post('sa_pn');
-	    if($sa_fn==null || $sa_fn=='') {
-        	echo '4';
-        	exit();
-    	}
-	    if(!preg_match('/^[a-zA-Z ]{1,50}$/',$sa_fn)){
-	        echo '5';
-	        exit();
-	    }
-	    if($sa_addr==null || $sa_addr=='') {
-	        echo '6';
-	        exit();
-	    }
-	    if(!preg_match('/^[a-zA-Z0-9 ]{1,100}$/',$sa_addr)){
-	        echo '7';
-	        exit();
-	    }
-	    if($sa_city==null || $sa_city=='') {
-	        echo '8';
-	        exit();
-	    }
-	    if(!preg_match('/^[a-zA-Z ]{1,30}$/',$sa_city)){
-	        echo '9';
-	        exit();
-	    }
-	    if($sa_state==null || $sa_state=='') {
-	        echo '10';
-	        exit();
-	    }
-	    if(!preg_match('/^[a-zA-Z ]{1,20}$/',$sa_state)){
-	        echo '11';
-	        exit();
-	    }
-	    if($sa_zip==null || $sa_zip=='') {
-	        echo '12';
-	        exit();
-	    }
-	    if(!preg_match('/^\d{5}(?:[-\s]\d{4})?$/',$sa_zip)){
-	        echo '13';
-	        exit();
-	    }
-	    if($sa_pn==null || $sa_pn=='') {
-	        echo '14';
-	        exit();
-	    }
-	    if(!preg_match('/^(?:\([2-9][0-9]{2}\)\ ?|[2-9][0-9]{2}(?:\-?|\ ?))[2-9][0-9]{2}[- ]?[0-9]{4}$/',$sa_pn)){ 
-	        echo '15';
-	        exit();
-	    }
-	    $res_shipping_addr = array();
-		$res_shipping_addr = $this->address_model->shipping_addr_retrieve($this->session->userdata('customer_id'));
-		if(count($res_shipping_addr) != 0) {
-        	$mode = 1;
-    	}
-    	else {
-        	$mode=0;
-    	}
-
-
-    	if($mode==0) {
-        	//$sql = ' INSERT INTO address(addressid,customerid,fullname,addressline,city,state,zip,phonenumber)VALUES ("", "'.$_SESSION['customer_id'].'", "'.$sa_fn.'", "'.$sa_addr.'", "'.$sa_city.'", "'.$sa_state.'", "'.$sa_zip.'", "'.$sa_pn.'");';
-       		$res = $this->address_model->shipping_addr_insert($this->session->userdata('customer_id'), $sa_fn, $sa_addr, $sa_city, $sa_state, $sa_zip, $sa_pn);
-    	}
-    	else {
-    		$res = shipping_addr_update($this->session->userdata('customer_id'), $sa_fn, $sa_addr, $sa_city, $sa_state, $sa_zip, $sa_pn);
-        	//$sql = '
-        	//UPDATE address SET fullname = "'.$sa_fn.'",addressline = "'.$sa_addr.'",city = "'.$sa_city.'",state = "'.$sa_state.'",zip = "'.$sa_zip.'",phonenumber = "'.$sa_pn.'" WHERE customerid = "'.$_SESSION['customer_id'].'" LIMIT 1; 
-        	//';
-    	}
- 
-    if($res) {
-        if($mode==0) {
-            echo '0';//'An shipping address has been successfully added.'; //succeed
-            exit();
-        }
-        else {
-            echo '1';//'The shipping address has been successfully updated.';// unknown error
-            exit();
-        }
-        
-    }
-    else {
-        if($mode==0) {
-            echo '2';//'Error: the shipping address can not be added.'; //succeed
-            exit();
-        }
-        else {
-            echo '3';//'Error: the shipping address can not be updated.';// unknown error
-            exit();
-        }
-    }
-    
-	}*/
-	}	
+}	
 ?>
