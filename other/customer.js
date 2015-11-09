@@ -1,7 +1,6 @@
+// this is the .js file for the whole website
 
-
-
-
+// load the home page of the site
 function startPage() {
     $.ajax({
         type:'post',// 
@@ -21,6 +20,8 @@ function startPage() {
     })
     
 }
+
+// display the navigation bar. If the user has logged in, his/her name will be displayed
 function dispLoginNavBar() {
     $.ajax({
         type:'post',// 
@@ -38,6 +39,8 @@ function dispLoginNavBar() {
         }
     })
 }
+
+// display special deals products 
 function special(cid) {
     $.ajax({
         type:'post',// 
@@ -54,6 +57,8 @@ function special(cid) {
         }
     })
 }
+
+// display all the products
 function regular_page(category_id) {
     $.ajax({
         type:'post',// 
@@ -71,6 +76,8 @@ function regular_page(category_id) {
         }
     })
 }
+
+// display the login page
 function dispLoginPage() {
     $.ajax({
         type:'post',// 
@@ -88,6 +95,7 @@ function dispLoginPage() {
     })
 }
 
+// pass the login information to server and check correctness
 function login_confirm() {
 
     var un = $('#id_txt_0_un').val();//document.getElementById('').value;
@@ -139,6 +147,7 @@ function login_confirm() {
     })
 }
 
+// create account
 function createAccount() {
     $.ajax({
         type:'post',// 
@@ -156,6 +165,7 @@ function createAccount() {
     })
 }
 
+// log out
 function cusLogOut() {
     $.ajax({
         type:'post',// 
@@ -173,6 +183,7 @@ function cusLogOut() {
     })
 }
 
+// modify password
 function editProfilePassword() {//view_edit_profile_password.php
    // document.getElementById('save_nav_bar').innerHTML =  '<div id="product_content" style="height:440px"><div id="product_head">Account Management</div><div style="margin-left:auto;margin-right:auto;width:550px;position:relative;top:30%;"><div style="float:left"><input type="button" value="Edit Your Profile" onclick="editProfileDisp()" style="width:200px;height:60px;font-size:15pt"></div><div style="float:left;width:150px;height:60px"></div><div style="float:left"><input type="button" onclick="changePasswordDisp()" value="Change Password" style="width:200px;height:60px;font-size:15pt"></div><div style="clear:both"></div></div></div>'; 
     $.ajax({
@@ -190,6 +201,8 @@ function editProfilePassword() {//view_edit_profile_password.php
         }
     })
 }
+
+// modify user's profile
 function editProfileDisp() {
         $.ajax({
         type:'post',// 
@@ -207,6 +220,8 @@ function editProfileDisp() {
         }
     })
 }
+
+// display the page of modifying password
 function changePasswordDisp() {
      $.ajax({
         type:'post',// 
@@ -225,6 +240,8 @@ function changePasswordDisp() {
     })
     //document.getElementById('save_nav_bar').innerHTML = '';
 }
+
+// the submit button of changing password
 function changePasswordConfirm() {
     var pw0 = $('#id_change_pw_0').val();//document.getElementById('id_change_pw_0').value;
     var pw1 = $('#id_change_pw_1').val();//document.getElementById('id_change_pw_1').value;
@@ -293,6 +310,8 @@ function changePasswordConfirm() {
 
    
 }
+
+// if change the password successfully
 function change_pw_succeed() {
     $.ajax({
         type:'post',// 
@@ -303,17 +322,14 @@ function change_pw_succeed() {
             // 0:Password must be at least 6 characters long. 1:Please enter a password and confirm it. 2:Please check that your passwords match and try again. 3:Password has been changed! 4:Error: password has not been changed.
             // document.getElementById('').innerHTML = ;
              $("#save_nav_bar").html(txt);
-           
-             
         },
         error:function(){
             alert('Error');
         }
-    })
-
-                
+    })                
 }
 
+// submit button to create a new account
 function createAccountConfirm() {
     var un = $('#create_acc_un').val();//document.getElementById('create_acc_un').value;
     var pw0 = $('#create_acc_pw0').val();//document.getElementById('create_acc_pw0').value;
@@ -382,8 +398,7 @@ function createAccountConfirm() {
         //document.getElementById('id_error_create_acc_0').innerHTML = 'Please enter your email address.';
         return;
     } 
-     
-
+    
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/create_acc_confirm',// 
@@ -456,6 +471,8 @@ function createAccountConfirm() {
         }
     })
 }
+
+// create a new account successfully
 function create_acc_succeed() {
 $.ajax({
         type:'post',// 
@@ -473,53 +490,45 @@ $.ajax({
     })
                 //
 }
+
+// submit button to edit the profile
 function editProfileConfirm() {
-        var un = $('#create_acc_un').val();//document.getElementById('create_acc_un').value;
-        var fn = $('#create_acc_f_name').val();//document.getElementById('create_acc_f_name').value;
-        var ln = $('#create_acc_l_name').val();//document.getElementById('create_acc_l_name').value;
-        var em = $('#create_acc_email').val();//document.getElementById('create_acc_email').value;
- 
+    var un = $('#create_acc_un').val();//document.getElementById('create_acc_un').value;
+    var fn = $('#create_acc_f_name').val();//document.getElementById('create_acc_f_name').value;
+    var ln = $('#create_acc_l_name').val();//document.getElementById('create_acc_l_name').value;
+    var em = $('#create_acc_email').val();//document.getElementById('create_acc_email').value;
+    // fields validation
     if(un==null || un=='') {
         $("#id_error_create_acc_0").html('Please enter your username.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z0-9_]{3,30}$");
     if(!pattern.test(un)) {
          $("#id_error_create_acc_0").html('Username can only contains letters, digits and underscores. And it should be 3 to 30 characters long.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     if(fn==null || fn=='') {
          $("#id_error_create_acc_0").html('Please enter your first name.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z]{1,30}$");
     if(!pattern.test(fn)) {
         $("#id_error_create_acc_0").html('Only letters are allowed in first name and last name.');
-        //document.getElementById('').innerHTML = ;//single quotes 
         return;
     }
     if(ln==null || ln=='') {
         $("#id_error_create_acc_0").html('Please enter your last name.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z]{1,30}$");
     if(!pattern.test(ln)) {
         $("#id_error_create_acc_0").html('Only letters are allowed in first name and last name.');
-       // document.getElementById('').innerHTML = ;//single quotes 
         return;
     }
     if(em==null || em=='') {
         $("#id_error_create_acc_0").html('Please enter your email address.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
- 
-
-
         $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/edit_profile_confirm',// 
@@ -534,59 +543,47 @@ function editProfileConfirm() {
             //alert(txt);
             if(txt=='3' || txt==3) {
                 $("#id_error_create_acc_0").html('Please enter your username.');
-                //document.getElementById('').innerHTML = ;
             }
             if(txt=='4' || txt==4) {
                 $("#id_error_create_acc_0").html('Username can only contains letters, digits and underscores. And it should be 3 to 30 characters long.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
             if(txt=='5' || txt==5) {
                 $("#id_error_create_acc_0").html('The username already exists.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
             if(txt=='6' || txt==6) {
                 $("#id_error_create_acc_0").html('Please enter your first name.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
             if(txt=='7' || txt==7) {
                  $("#id_error_create_acc_0").html('Only letters are allowed in first name and last name.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;//single quotes 
             }
             if(txt=='8' || txt==8) {
                 $("#id_error_create_acc_0").html('Please enter your last name.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
             if(txt=='9' || txt==9) {
                 $("#id_error_create_acc_0").html('Please enter your email address.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
             if(txt=='10' || txt==10) {
                  $("#id_error_create_acc_0").html('Invalid email address.');
-                //document.getElementById('id_error_create_acc_0').innerHTML = ;
             }
-
-
             if(txt=='12' || txt==12) {
                 $("#id_error_create_acc_0").html('Error: failed to modify your profile.');
-                //document.getElementById('').innerHTML = ;
             }
             if(txt=='100' || txt==100) { 
                 edit_prof_succeed();
                 dispLoginNavBar();      
             }
-            //document.getElementById('save_nav_bar').innerHTML = txt;
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
         }
     })
 }
+
+// successfully modified the profile
 function edit_prof_succeed() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/edit_prof_succeed',// 
-       // data:'cid='+category_id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             //document.getElementById('').innerHTML = ;
@@ -597,19 +594,17 @@ function edit_prof_succeed() {
             alert('Error');
         }
     })
-    // = '';
 }
+
+// display the page of address and payment information
 function addr_payment_display() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/addr_payment_display',// 
-       // data:'cid='+category_id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
              $("#save_nav_bar").html(txt);
-           // document.getElementById('').innerHTML = ;
             dispLoginNavBar();
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
@@ -617,6 +612,7 @@ function addr_payment_display() {
     })
 }
 
+// display the page of adding/updating shipping address
 function addUpdateShippingAddr() {
     sa_fn = $('#id_sa_fn').val();//document.getElementById('id_sa_fn').value;
     sa_addr = $('#id_sa_addr').val();//document.getElementById('id_sa_addr').value;
@@ -627,67 +623,53 @@ function addUpdateShippingAddr() {
 
    if(sa_fn==null || sa_fn=='') {
         $("#id_error_shipping_addr").html('Please enter your name.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z ]{1,50}$");
     if(!pattern.test(sa_fn)) {
         $("#id_error_shipping_addr").html('Invalid name. Only letters and spaces are allowed in name field. And the length should be 1 to 50 characters.');
-       // document.getElementById('').innerHTML = ;
         return;
     }
     if(sa_addr==null || sa_addr=='') {
          $("#id_error_shipping_addr").html('Please enter your address.');
-        //document.getElementById('id_error_shipping_addr').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z0-9 ]{1,100}$");
     if(!pattern.test(sa_addr)) {
         $("#id_error_shipping_addr").html('Invalid address. Only letters, digits and spaces are allowed in address field. And the length should be 1 to 100 characters.');
-        //document.getElementById('id_error_shipping_addr').innerHTML =;
         return;
     }
     if(sa_city==null || sa_city=='') {
         $("#id_error_shipping_addr").html('Please enter the city name.');
-        //document.getElementById('id_error_shipping_addr').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z ]{1,30}$");
     if(!pattern.test(sa_city)) {
         $("#id_error_shipping_addr").html('Invalid city name. Only letters and spaces are allowed in city field. And the length should be 1 to 30 characters.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     if(sa_state==null || sa_state=='') {
         $("#id_error_shipping_addr").html('Please enter the state name.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^[a-zA-Z ]{1,20}$");
     if(!pattern.test(sa_state)) {
         $("#id_error_shipping_addr").html('Invalid state name. Only letters and spaces are allowed in state field. And the length should be 1 to 20 characters.');
-        //document.getElementById('id_error_shipping_addr').innerHTML = ;
         return;
     }
     if(sa_zip==null || sa_zip=='') {
         $("#id_error_shipping_addr").html('Please enter the zip code.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
     if(sa_pn==null || sa_pn=='') {
          $("#id_error_shipping_addr").html('Please enter the phone number.');
-       // document.getElementById('').innerHTML = ;
         return;
     }
     var pattern = new RegExp("^(?:\([2-9][0-9]{2}\)\ ?|[2-9][0-9]{2}(?:\-?|\ ?))[2-9][0-9]{2}[- ]?[0-9]{4}$");
     if(!pattern.test(sa_pn)) {
         $("#id_error_shipping_addr").html('Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.');
-        //document.getElementById('').innerHTML = ;
         return;
     }
- 
-
-
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/add_update_shipping_addr',// 'mode='+mode+'&'+
@@ -699,56 +681,42 @@ function addUpdateShippingAddr() {
                 dispLoginNavBar();
                 return;
             }
-            //addr_payment_display();
-            //document.getElementById('id_error_shipping_addr').innerHTML = txt;
-            
             // 4. Please enter your name. 5. Only letters, commas, periods, hyphens and spaces are allowed in name field. And the length should be 1 to 50 characters.
             // 6. Please enter your address. 7. Only letters, digits and spaces are allowed in address field. And the length should be 1 to 100 characters.
             // 8. Please enter the city name. 9. Only letters and spaces are allowed in city field. And the length should be 1 to 30 characters.
             // 10. Please enter the state name. 11. Only letters and spaces are allowed in state field. And the length should be 1 to 20 characters.
             // 12. Please enter the zip code. 13. Invalid zip code. Correct format: 12345 | 12345-6789 | 12345 1234.
             // 14. Please enter the phone number. 15. Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.
-            //alert(txt);
             if(txt=='0' || txt==0) {
-                 $("#id_error_shipping_addr").html('An shipping address has been successfully added.');
-                //document.getElementById('').innerHTML = ;
+                $("#id_error_shipping_addr").html('An shipping address has been successfully added.');
                 butt_change_0();
-                 } 
+            } 
             if(txt=='1' || txt==1) {
                 $("#id_error_shipping_addr").html('The shipping address has been successfully updated.');
-                //document.getElementById('').innerHTML = ;
             }
             if(txt=='2' || txt==2) {
                 $("#id_error_shipping_addr").html('Error: the shipping address can not be added.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='3' || txt==3) {
                 $("#id_error_shipping_addr").html('Error: the shipping address can not be updated.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='4' || txt==4) {
                 $("#id_error_shipping_addr").html('Please enter your name.');
-               // document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='5' || txt==5) {
                  $("#id_error_shipping_addr").html('Invalid name. Only letters and spaces are allowed in name field. And the length should be 1 to 50 characters.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='6' || txt==6) {
                 $("#id_error_shipping_addr").html('Please enter your address.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='7' || txt==7) {
                  $("#id_error_shipping_addr").html('Invalid address. Only letters, digits and spaces are allowed in address field. And the length should be 1 to 100 characters.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='8' || txt==8) {
                 $("#id_error_shipping_addr").html('Please enter the city name.');
-                //document.getElementById('id_error_shipping_addr').innerHTML = ;
             }
             if(txt=='9' || txt==9) {
                 $("#id_error_shipping_addr").html('Invalid city name. Only letters and spaces are allowed in city field. And the length should be 1 to 30 characters.');
- 
             }
             if(txt=='10' || txt==10) {
                 $("#id_error_shipping_addr").html('Please enter the state name.');
@@ -774,8 +742,7 @@ function addUpdateShippingAddr() {
         }
     })
 }
-//
-                // = 
+
 function butt_change_0() {
     $.ajax({
         type:'post',// 
@@ -790,6 +757,8 @@ function butt_change_0() {
         }
     })
 }
+
+// display the page of adding/updating credit card information
 function addUpdateCreditCard() {
     ba_nm = $('#id_ba_name').val();//document.getElementById('id_ba_name').value;
     ba_cn = $('#id_ba_card_number').val();//document.getElementById('id_ba_card_number').value;
@@ -802,7 +771,6 @@ function addUpdateCreditCard() {
     ba_zip = $('#id_ba_zip').val();//document.getElementById('id_ba_zip').value;
     ba_pn = $('#id_ba_phone_number').val();//document.getElementById('id_ba_phone_number').value;
 
- 
     if(ba_nm==null || ba_nm=='') {
         $("#id_error_billing_addr_payment_method").html('Please enter your name.');   
         return;
@@ -875,13 +843,6 @@ function addUpdateCreditCard() {
         $("#id_error_billing_addr_payment_method").html('Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.');   
         return;
     }
- 
-
-
-
-
-
-
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/add_update_card_billing_addr',// 'mode='+mode+'&'+
@@ -894,14 +855,11 @@ function addUpdateCreditCard() {
                 dispLoginNavBar();
                 return;
             }
-            //document.getElementById('id_error_billing_addr_payment_method').innerHTML = txt;
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
             // 4. Please enter your name. 5. Invalid name. Only letters and spaces are allowed in name field. And the length should be 1 to 50 characters.
             // 6. Please enter your credit card number. 7. Invalid credit card number. Credit card number should contain 16 digits.
             // 8. Please provide the expiration date of your credit card.
             // 9. Please enter the CVV number. 10. Invalid CVV number. The CVV number should contain 3 digits. 
             // 11. Please enter your billing address. 12. In valid address. Only letters, digits and spaces are allowed in address field. And the length should be 1 to 100 characters.
-
             // 13. Please enter the city name. 14. Invalid city name. Only letters and spaces are allowed in city field. And the length should be 1 to 30 characters.
             // 15. Please enter the state name. 16. Invalid state name. Only letters and spaces are allowed in state field. And the length should be 1 to 20 characters.
             // 17. Please enter the zip code. 18. Invalid zip code. Correct format: 12345 | 12345-6789 | 12345 1234.
@@ -970,7 +928,6 @@ function addUpdateCreditCard() {
             if(txt=='20' || txt==20) {
                  $("#id_error_billing_addr_payment_method").html('Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.');   
             }
-            
         },
         error:function(){
             alert('Error');
@@ -982,7 +939,6 @@ function butt_change_1() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/butt_change_1',// 
-        
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             $("#addr_pament_display_button_1").html(txt); 
@@ -992,6 +948,8 @@ function butt_change_1() {
         }
     })
 }     
+
+// add product to cart
 function addToCart(pro_id) {
     $.ajax({
         type:'post',// 
@@ -1005,7 +963,6 @@ function addToCart(pro_id) {
                 flac_recommand_cart = false;
                 return;
             }
-            //alert('');
             navBarCartNumber();
             if(flac_recommand_cart) {
                 cart();
@@ -1017,24 +974,21 @@ function addToCart(pro_id) {
             alert('Error');
         }
     })
-
 }
+
 var flac_recommand_cart = false;
 function addToCart_recommand(id) {
     flac_recommand_cart = true;
     addToCart(id);
-    //cart();
-    //alert('cart');
 }
 
+// display the cart page
 function cart() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/cart_display',// 
-        //data:'pro_id='+pro_id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
-           // alert(txt);
            $("#save_nav_bar").html(txt); 
             dispLoginNavBar();
             reccomand();  
@@ -1044,18 +998,15 @@ function cart() {
         }
     })
 }
-function reccomand() {
 
-    //id = reccomend
+// recommand relative products according to user's cart
+function reccomand() {
         $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/recommand',// 
-        //data:'pro_id='+pro_id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             $("#reccomend").html(txt);
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
@@ -1063,24 +1014,24 @@ function reccomand() {
     })
 }
 
+// function of 'minus' button in cart page
 function cartQtyMinus(id) {//0
     qty=$('#cartqtyinput_'+id).val();//document.getElementById('cartqtyinput_'+id).value;
-    //document.getElementById('cartqtyinput_'+id).value--;
     qty--;
     $('#cartqtyinput_'+id).val(qty);
     cartQtyInput(qty, id);
 }
+
+// function of 'plus' button in cart page
 function cartQtyPlus(id) {//1
     qty=$('#cartqtyinput_'+id).val();//document.getElementById('cartqtyinput_'+id).value;
-    //document.getElementById('cartqtyinput_'+id).value++;
     qty++;
     $('#cartqtyinput_'+id).val(qty);
     cartQtyInput(qty, id);
 }
-function cartQtyInput(qty, id) {
-    //alert(qty+'   '+id);
-    //document.getElementById('cart_err_msg_'+id).innerHTML=qty;
 
+// function of text field of quantity of products
+function cartQtyInput(qty, id) {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/cart_qty_input',// 
@@ -1092,32 +1043,25 @@ function cartQtyInput(qty, id) {
                 dispLoginNavBar();
                 return;
             }
-            //alert(txt);
-             //document.getElementById('cart_err_msg_'+id).innerHTML = txt;
            if(txt=='-1'|| txt==-1  ) {
-                //document.getElementById('cart_err_msg_'+id).innerHTML='Invalid Number!';
                 $("#cart_err_msg_"+id).html('Invalid Number!');
-                //document.getElementById('cartqtyinput_'+id).value=1;
                 $('#cartqtyinput_'+id).val(1);
             }
             if(txt=='1'|| txt==1  ) {
-                //document.getElementById('cart_err_msg_'+id).innerHTML='';
                  $("#cart_err_msg_"+id).html('');
             }
             if(txt=='2'|| txt==2  ) {
                 $("#cart_err_msg_"+id).html("Can't change qty.");
-               // document.getElementById('cart_err_msg_'+id).innerHTML="Can't change qty.";
             }
             cartTotPrice(id);
-            
-
         },
         error:function(){
             alert('Error');
         }
     })
-
 }
+
+// delete an item in the cart
 function cartItermDelete(id) {//2
     $.ajax({
         type:'post',// 
@@ -1127,29 +1071,20 @@ function cartItermDelete(id) {//2
         success:function(txt){
              if( (txt!=null) && (txt != '') && (txt.length > 10)  ) {
                 $("#save_nav_bar").html(txt);
-                dispLoginNavBar();
-                
+                dispLoginNavBar();  
                 return;
             }
-
-
             cart();
             navBarCartNumber();
-            //document.getElementById('id_div_1_table').innerHTML = txt;
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
-           // dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
         }
     })
-
 }
 
-
-
+// calculate the total price of the cart
 function cartTotPrice(id) {
-    //cart_total_price_
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/cart_total_price',// 
@@ -1157,14 +1092,14 @@ function cartTotPrice(id) {
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             $("#cart_total_price_"+id).html(txt);
-            //document.getElementById('cart_total_price_'+id).innerHTML = txt;
-
         },
         error:function(){
             alert('Error');
         }
     })
 }
+
+// redirect to the check out page
 function proceedToCO() {
     $.ajax({
         type:'post',// 
@@ -1183,12 +1118,7 @@ function proceedToCO() {
             else {
                 // go to address and payment info page
                 checkOutShippingAddr();
-               // document.getElementById('product_info').innerHTML =
-            }
-            
-            //document.getElementById('cart_total_price_'+id).innerHTML = txt;
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
-           // dispLoginNavBar(); 
+            }            
         },
         error:function(){
             alert('Error');
@@ -1220,9 +1150,6 @@ function checkOutShippingAddrConfirm() {
     sa_state = $('#id_sa_state_co').val();//document.getElementById('id_sa_state_co').value;
     sa_zip = $('#id_sa_zip_co').val();//document.getElementById('id_sa_zip_co').value;
     sa_pn = $('#id_sa_phone_number_co').val();//document.getElementById('id_sa_phone_number_co').value;
-
-
- 
     if(sa_fn==null || sa_fn=='') {
         $("#id_error_shipping_addr_co").html('Please enter your name.');
         return;
@@ -1273,9 +1200,6 @@ function checkOutShippingAddrConfirm() {
         return;
     }
  
-
-
-
         $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/add_update_shipping_addr',// 
@@ -1333,14 +1257,13 @@ function checkOutShippingAddrConfirm() {
             if(txt=='15' || txt==15) {
                 $("#id_error_shipping_addr_co").html('Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.');
             }
-
         },
         error:function(){
             alert('Error');
         }
     })
-
 }
+
 function checkOutCreditCard() {
     $.ajax({
         type:'post',// 
@@ -1350,13 +1273,13 @@ function checkOutCreditCard() {
         success:function(txt){
             $("#save_nav_bar").html(txt);
             dispLoginNavBar();
-
         },
         error:function(){
             alert('Error');
         }
     })
 }
+
 function checkOutCreditCardConfirm() {
     ba_nm = $('#id_ba_name_co').val();//document.getElementById('id_ba_name_co').value;
     ba_cn = $('#id_ba_card_number_co').val();//document.getElementById('id_ba_card_number_co').value;
@@ -1368,8 +1291,6 @@ function checkOutCreditCardConfirm() {
     ba_st = $('#id_ba_state_co').val();//document.getElementById('id_ba_state_co').value;
     ba_zip = $('#id_ba_zip_co').val();//document.getElementById('id_ba_zip_co').value;
     ba_pn = $('#id_ba_phone_number_co').val();//document.getElementById('id_ba_phone_number_co').value;
-
-
  
     if(ba_nm==null || ba_nm=='') {
         $("#id_error_billing_addr_payment_method_co").html('Please enter your name.');
@@ -1443,10 +1364,6 @@ function checkOutCreditCardConfirm() {
         $("#id_error_billing_addr_payment_method_co").html('Invalid phone number. Correct format: 9496983107 | 949-698-3107 | 949 698 3107.');
         return;
     }
-
- 
-
-
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/add_update_card_billing_addr',// 'mode='+mode+'&'+
@@ -1459,15 +1376,11 @@ function checkOutCreditCardConfirm() {
                 dispLoginNavBar();
                 return;
             }
-            //alert(txt);
-            //document.getElementById('id_error_billing_addr_payment_method').innerHTML = txt;
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
             // 4. Please enter your name. 5. Invalid name. Only letters and spaces are allowed in name field. And the length should be 1 to 50 characters.
             // 6. Please enter your credit card number. 7. Invalid credit card number. Credit card number should contain 16 digits.
             // 8. Please provide the expiration date of your credit card.
             // 9. Please enter the CVV number. 10. Invalid CVV number. The CVV number should contain 3 digits. 
             // 11. Please enter your billing address. 12. In valid address. Only letters, digits and spaces are allowed in address field. And the length should be 1 to 100 characters.
-
             // 13. Please enter the city name. 14. Invalid city name. Only letters and spaces are allowed in city field. And the length should be 1 to 30 characters.
             // 15. Please enter the state name. 16. Invalid state name. Only letters and spaces are allowed in state field. And the length should be 1 to 20 characters.
             // 17. Please enter the zip code. 18. Invalid zip code. Correct format: 12345 | 12345-6789 | 12345 1234.
@@ -1539,64 +1452,45 @@ function checkOutCreditCardConfirm() {
         }
     })
 }
-function placeOrder() {
 
-  
+// place order. Save the order information to database
+function placeOrder() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/place_order',// 
-        //data:'id='+id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
-
-            
-            //document.getElementById('product_info').innerHTML =txt;
             //0. Please login first.  1. Failed to place order. The cart is empty. Please add products to cart first.
             //2. Error: failed to place order.  3. Error: the order has been placed but some (or all) products are absent in this order.
             //4. Error: the order has been successfully placed but the cart can not be cleared.  5. ok
             //<div id="login_nav"></div>
              $("#save_nav_bar").html(txt);
              dispLoginNavBar();
-           
-            
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
         }
     }) 
 }
-/*function place_order_display(msg) {
-    $.ajax({
-        type:'post',// 
-        url:'http://cs-server.usc.edu:6452/x7/index.php/customer/place_order_display',// 
-        dataType:'text',// XML ,Json jsonp script html text 
-        success:function(txt){
-           
-        },
-        error:function(){
-            alert('Error');
-        }
-    })
-}*/
+ 
+// order history
 function ordersPlaced() {
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/orders_placed_display',// 
-        //data:'pro_id='+pro_id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             //alert(txt);
             $("#save_nav_bar").html(txt);
             dispLoginNavBar();
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
         }
     })
 }
+
+// previous order details
 function orderDetails(id) {
     $.ajax({
         type:'post',// 
@@ -1607,8 +1501,6 @@ function orderDetails(id) {
             //alert(txt);
             $("#save_nav_bar").html(txt);
             dispLoginNavBar();
-            //document.getElementById('addr_pament_display_button_1').innerHTML = '<input type="button" value="Update" class="cl_butt_login" onclick="addUpdateCreditCard(1)" style="width:180px;font-size:11pt">';
-            //dispLoginNavBar(); 
         },
         error:function(){
             alert('Error');
@@ -1616,12 +1508,11 @@ function orderDetails(id) {
     })
 }
 
+// display the item number in the navigation bar dynamicly 
 function navBarCartNumber() {
-//nav_bar_cart_number
     $.ajax({
         type:'post',// 
         url:'http://cs-server.usc.edu:6452/x7/index.php/customer/nav_bar_cart_num',// 
-        //data:'id='+id,// 
         dataType:'text',// XML ,Json jsonp script html text 
         success:function(txt){
             //alert(txt);
